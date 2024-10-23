@@ -5,9 +5,12 @@ function Navigation() {
     <nav>
       <ul>
         <li><Link to="/">Home</Link></li>
+        <li><Link to="/signup">Sign Up</Link></li>
         <li><Link to="/login">Login</Link></li>
-        <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
-        <li><Link to="/chief-dashboard">Chief Dashboard</Link></li>
+        <li><Link to="/donations">Donations</Link></li>
+        <li><Link to="/volunteers">Volunteers</Link></li>
+        <li><Link to="/incident-reporting">Real-time Reporting</Link></li>
+        <li><Link to="/alerts">Alerts & Notifications</Link></li>
       </ul>
     </nav>
   );

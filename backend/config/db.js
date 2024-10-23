@@ -1,3 +1,4 @@
+// config/db.js
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
@@ -6,10 +7,10 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('MongoDB connected');
+    console.log('MongoDB connected successfully');
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error('MongoDB connection failed:', error.message);
+    process.exit(1); // Exit the process with failure
   }
 };
 

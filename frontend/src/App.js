@@ -1,12 +1,14 @@
-import './App.css'; 
+import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-import AdminDashboard from './pages/AdminDashboard';
-import ChiefDashboard from './pages/ChiefDashboard';
-import NotFound from './pages/NotFound';
-import Navigation from './components/Navigation';
+import IncidentReportForm from './components/IncidentReportForm';
 import Login from './components/Login';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import SignUp from './components/SignUp';
+import Donations from './components/Donations';
+import Volunteers from './components/Volunteers';
+import Navigation from './components/Navigation';
+import NotFound from './pages/NotFound';
+import Alerts from './components/Alerts';
 
 
 function App() {
@@ -15,9 +17,13 @@ function App() {
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/chief-dashboard" element={<ChiefDashboard />} />
+        <Route path="/incident-reporting" element={<IncidentReportForm />} />
+        <Route path="/donations" element={<Donations />} />
+        <Route path="/volunteers" element={<Volunteers />} />
+        <Route path="/alerts" element={<Alerts />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

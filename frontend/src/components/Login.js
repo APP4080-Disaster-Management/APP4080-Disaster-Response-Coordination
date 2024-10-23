@@ -9,13 +9,22 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
-      localStorage.setItem('token', response.data.token); // Store the token
-      // Redirect to dashboard based on user role
-      if (response.data.role === 'admin') {
-        window.location.href = '/admin-dashboard';
-      } else {
-        window.location.href = '/chief-dashboard';
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, { email, password });
+      localStorage.setItem('token', response.data.token);
+      
+      // Role-based redirection
+      switch(response.data.role) {
+        case 'victim':
+          window.location.href = '/victim-dashboard';
+          break;
+        case 'responder':
+          window.location.href = '/responder-dashboard';
+          break;
+        case 'coordinator':
+          window.location.href = '/coordinator-dashboard';
+          break;
+        default:
+          window.location.href = '/';
       }
     } catch (err) {
       setError('Invalid email or password');

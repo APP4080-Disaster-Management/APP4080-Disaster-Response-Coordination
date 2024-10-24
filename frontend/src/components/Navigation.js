@@ -10,7 +10,7 @@ function Navigation() {
         <li><Link to="/donations">Donations</Link></li>
         <li><Link to="/volunteers">Volunteers</Link></li>
         <li><Link to="/incident-reporting">Real-time Reporting</Link></li>
-        <li><Link to="/alerts">Alerts & Notifications</Link></li>
+        <li><Link to="/alerts">Alerts</Link></li>
       </ul>
     </nav>
   );

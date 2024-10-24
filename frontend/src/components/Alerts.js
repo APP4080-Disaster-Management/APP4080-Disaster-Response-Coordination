@@ -1,41 +1,71 @@
-// src/components/Alerts.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+
+const containerStyle = {
+  width: '100%',
+  height: '300px',
+};
+
+// Default location (can be overridden by Geolocation)
+const defaultCenter = {
+  lat: 51.505,
+  lng: -0.09,
+};
 
 const Alerts = () => {
   const [alertDetails, setAlertDetails] = useState({
     alertTitle: '',
     alertMessage: '',
-    location: { lat: 51.505, lng: -0.09 }, // Default location
+    location: { type: 'Point', coordinates: [defaultCenter.lng, defaultCenter.lat] }, // GeoJSON format
   });
 
+  // Get the user's current location on component mount
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setAlertDetails((prevDetails) => ({
+            ...prevDetails,
+            location: {
+              type: 'Point',
+              coordinates: [position.coords.longitude, position.coords.latitude], // [lng, lat]
+            },
+          }));
+        },
+        (error) => {
+          console.error('Error getting location', error);
+        }
+      );
+    }
+  }, []);
+
+  // Handle map click to update location
   const handleMapClick = (e) => {
     setAlertDetails({
       ...alertDetails,
-      location: { lat: e.latlng.lat, lng: e.latlng.lng },
+      location: {
+        type: 'Point',
+        coordinates: [e.latLng.lng(), e.latLng.lat()], // [lng, lat] format
+      },
     });
   };
 
+  // Handle input changes for alert title and message
   const handleChange = (e) => {
     setAlertDetails({ ...alertDetails, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post('/api/alerts', alertDetails);
       alert('Alert sent successfully!');
     } catch (error) {
+      console.error('Error sending alert:', error);
       alert('Error sending alert');
     }
-  };
-
-  const MapClickHandler = () => {
-    useMapEvents({
-      click: handleMapClick,
-    });
-    return null;
   };
 
   return (
@@ -67,15 +97,24 @@ const Alerts = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="location" className="form-label">Alert Location</label>
-          <MapContainer
-            center={[alertDetails.location.lat, alertDetails.location.lng]}
-            zoom={13}
-            style={{ height: "300px", width: "100%" }}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={[alertDetails.location.lat, alertDetails.location.lng]} />
-            <MapClickHandler />
-          </MapContainer>
+          <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={{
+                lat: alertDetails.location.coordinates[1], // latitude
+                lng: alertDetails.location.coordinates[0], // longitude
+              }}
+              zoom={13}
+              onClick={handleMapClick} // Update location on map click
+            >
+              <Marker
+                position={{
+                  lat: alertDetails.location.coordinates[1], // latitude
+                  lng: alertDetails.location.coordinates[0], // longitude
+                }}
+              />
+            </GoogleMap>
+          </LoadScript>
         </div>
         <button type="submit" className="btn btn-primary">Send Alert</button>
       </form>

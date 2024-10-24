@@ -11,10 +11,13 @@ function Home() {
       <section className="features">
         <h2>Key Features</h2>
         <ul>
-          <li>Real-time communication tools for responders</li>
-          <li>Resource allocation tracking</li>
-          <li>Interactive maps for situational awareness</li>
-          <li>Collaboration tools for agencies and volunteers</li>
+          <li>Real-time alerts and notifications for disasters</li>
+          <li>Reporting and tracking of incidents with verification status</li>
+          <li>Geospatial mapping for situational awareness and incident locations</li>
+          <li>Resource management for donations, supplies, and volunteers</li>
+          <li>Collaboration tools for responders, volunteers, and coordinators</li>
+          <li>Secure authentication for administrators and chiefs</li>
+          <li>Offline capabilities for field operations in disconnected environments</li>
         </ul>
       </section>
       <section className="call-to-action">

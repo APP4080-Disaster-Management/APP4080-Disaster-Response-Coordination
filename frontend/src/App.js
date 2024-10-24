@@ -1,4 +1,3 @@
-// Example usage in App.js
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
@@ -21,9 +20,14 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <button onClick={notify}>Show Notification</button> {/* Button for testing notification */}
+
       <Router>
-        <Navigation />
+        {/* Container to hold both Navigation and Notification Button */}
+        <div className="nav-container">
+          <Navigation />
+          <button onClick={notify} className="notify-btn">Show Notification</button>
+        </div>
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
@@ -40,4 +44,3 @@ function App() {
 }
 
 export default App;
-

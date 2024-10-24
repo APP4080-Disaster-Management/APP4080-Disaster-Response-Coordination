@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-// import './SignUp.css'; // Importing a CSS file for styling
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  // Importing CSS for toast notifications
 
 function SignUp() {
+  const handleGoogleSuccess = (credentialResponse) => {
+    console.log(credentialResponse);
+    toast.success('Google Login Successful');
+  };
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
-  
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -33,9 +40,10 @@ function SignUp() {
       setErrors(validationErrors);
     } else {
       console.log('Form submitted:', formData);
-      // Here you would typically send the formData to your backend
+      // Submit form data to the backend
       setFormData({ username: '', email: '', password: '' }); // Reset form
       setErrors({}); // Clear errors
+      toast.success('Signup Successful');
     }
   };
 
@@ -81,7 +89,16 @@ function SignUp() {
           />
           {errors.password && <span className="error">{errors.password}</span>}
         </div>
-        
+
+        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => {
+              toast.error('Google Login Failed');
+            }}
+          />
+        </GoogleOAuthProvider>
+
         <button type="submit" className="signup-button">Sign Up</button>
       </form>
     </div>

@@ -1,4 +1,3 @@
-// src/components/IncidentReportForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -8,6 +7,28 @@ const IncidentReportForm = () => {
     description: '',
     location: '',
   });
+
+  // List of locations in Nairobi
+  const locations = [
+    { value: '', label: 'Select a location' },
+    { value: 'central_business_district', label: 'Central Business District' },
+    { value: 'westlands', label: 'Westlands' },
+    { value: 'nairobi_river', label: 'Nairobi River' },
+    { value: 'uhuru_park', label: 'Uhuru Park' },
+    { value: 'karura_forest', label: 'Karura Forest' },
+    { value: 'langata', label: 'Langata' },
+    { value: 'embakasi', label: 'Embakasi' },
+    { value: 'kibera', label: 'Kibera' },
+    { value: 'mombasa_road', label: 'Mombasa Road' },
+    { value: 'parklands', label: 'Parklands' },
+    { value: 'karen', label: 'Karen' },
+    { value: 'lavington', label: 'Lavington' },
+    { value: 'donholm', label: 'Donholm' },
+    { value: 'ruai', label: 'Ruai' },
+    { value: 'kiambu_road', label: 'Kiambu Road' },
+    { value: 'gikambura', label: 'Gikambura' },
+    // Add more locations as needed
+  ];
 
   const handleChange = (e) => {
     setIncidentDetails({
@@ -35,15 +56,37 @@ const IncidentReportForm = () => {
     <form onSubmit={handleSubmit}>
       <div>
         <label>Title</label>
-        <input type="text" name="title" value={incidentDetails.title} onChange={handleChange} required />
+        <input 
+          type="text" 
+          name="title" 
+          value={incidentDetails.title} 
+          onChange={handleChange} 
+          required 
+        />
       </div>
       <div>
         <label>Description</label>
-        <textarea name="description" value={incidentDetails.description} onChange={handleChange} required />
+        <textarea 
+          name="description" 
+          value={incidentDetails.description} 
+          onChange={handleChange} 
+          required 
+        />
       </div>
       <div>
         <label>Location</label>
-        <input type="text" name="location" value={incidentDetails.location} onChange={handleChange} required />
+        <select 
+          name="location" 
+          value={incidentDetails.location} 
+          onChange={handleChange} 
+          required
+        >
+          {locations.map((loc) => (
+            <option key={loc.value} value={loc.value}>
+              {loc.label}
+            </option>
+          ))}
+        </select>
       </div>
       <button type="submit">Report Incident</button>
     </form>

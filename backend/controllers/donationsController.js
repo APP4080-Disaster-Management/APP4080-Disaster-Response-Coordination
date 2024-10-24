@@ -5,18 +5,19 @@ const getDonations = async (req, res) => {
     const donations = await Donation.find();
     res.json(donations);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching donations' });
+    res.status(500).json({ message: 'Error fetching donations', error });
   }
 };
 
 const addDonation = async (req, res) => {
   const { name, amount } = req.body;
+
   try {
     const donation = new Donation({ name, amount });
     await donation.save();
     res.status(201).json(donation);
   } catch (error) {
-    res.status(400).json({ message: 'Error adding donation' });
+    res.status(400).json({ message: 'Error adding donation', error });
   }
 };
 

@@ -1,3 +1,4 @@
+// Example usage in App.js
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
@@ -9,25 +10,34 @@ import Volunteers from './components/Volunteers';
 import Navigation from './components/Navigation';
 import NotFound from './pages/NotFound';
 import Alerts from './components/Alerts';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  return (
-    <Router>
-      <Navigation />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/incident-reporting" element={<IncidentReportForm />} />
-        <Route path="/donations" element={<Donations />} />
-        <Route path="/volunteers" element={<Volunteers />} />
-        <Route path="/alerts" element={<Alerts />} />
+  const notify = () => {
+    toast('Welcome to the Disaster Response Coordination App!');
+  };
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
+  return (
+    <>
+      <ToastContainer />
+      <button onClick={notify}>Show Notification</button> {/* Button for testing notification */}
+      <Router>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/incident-reporting" element={<IncidentReportForm />} />
+          <Route path="/donations" element={<Donations />} />
+          <Route path="/volunteers" element={<Volunteers />} />
+          <Route path="/alerts" element={<Alerts />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
 export default App;
+

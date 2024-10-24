@@ -1,12 +1,14 @@
 // src/components/Volunteers.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const Volunteers = () => {
   const [volunteerDetails, setVolunteerDetails] = useState({
     name: '',
     skills: '',
-    availability: ''
+    availability: new Date() // Initialize with current date
   });
 
   const handleChange = (e) => {
@@ -16,10 +18,17 @@ const Volunteers = () => {
     });
   };
 
+  const handleDateChange = (date) => {
+    setVolunteerDetails({
+      ...volunteerDetails,
+      availability: date // Update availability when date is selected
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/volunteers', volunteerDetails);  // Remove response
+      await axios.post('/api/volunteers', volunteerDetails);  
       alert('Volunteer form submitted successfully!');
     } catch (error) {
       console.error(error);
@@ -57,13 +66,11 @@ const Volunteers = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="availability" className="form-label">Availability</label>
-          <input
-            type="text"
+          <DatePicker
+            selected={volunteerDetails.availability}
+            onChange={handleDateChange}
             className="form-control"
-            id="availability"
-            name="availability"
-            value={volunteerDetails.availability}
-            onChange={handleChange}
+            dateFormat="yyyy/MM/dd" // You can adjust the format as needed
             required
           />
         </div>

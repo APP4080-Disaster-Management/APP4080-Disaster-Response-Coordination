@@ -9,5 +9,5 @@ const incidentSchema = new mongoose.Schema({
   chiefNotified: { type: Boolean, default: false }
 });
 
-const Incident = mongoose.model('Incident', incidentSchema);
-module.exports = Incident;
+module.exports = mongoose.model('Incident', incidentSchema);
+

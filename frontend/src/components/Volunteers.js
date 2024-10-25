@@ -8,7 +8,7 @@ const Volunteers = () => {
   const [volunteerDetails, setVolunteerDetails] = useState({
     name: '',
     skills: '',
-    availability: new Date() // Initialize with current date
+    availability: new Date() 
   });
 
   const handleChange = (e) => {
@@ -70,7 +70,7 @@ const Volunteers = () => {
             selected={volunteerDetails.availability}
             onChange={handleDateChange}
             className="form-control"
-            dateFormat="yyyy/MM/dd" // You can adjust the format as needed
+            dateFormat="yyyy/MM/dd" 
             required
           />
         </div>

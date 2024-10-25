@@ -7,7 +7,6 @@ const containerStyle = {
   height: '300px',
 };
 
-// Default location (can be overridden by Geolocation)
 const defaultCenter = {
   lat: 51.505,
   lng: -0.09,
@@ -17,7 +16,7 @@ const Alerts = () => {
   const [alertDetails, setAlertDetails] = useState({
     alertTitle: '',
     alertMessage: '',
-    location: { type: 'Point', coordinates: [defaultCenter.lng, defaultCenter.lat] }, // GeoJSON format
+    location: { type: 'Point', coordinates: [defaultCenter.lng, defaultCenter.lat] },
   });
 
   // Get the user's current location on component mount
@@ -29,7 +28,7 @@ const Alerts = () => {
             ...prevDetails,
             location: {
               type: 'Point',
-              coordinates: [position.coords.longitude, position.coords.latitude], // [lng, lat]
+              coordinates: [position.coords.longitude, position.coords.latitude],
             },
           }));
         },
@@ -46,12 +45,12 @@ const Alerts = () => {
       ...alertDetails,
       location: {
         type: 'Point',
-        coordinates: [e.latLng.lng(), e.latLng.lat()], // [lng, lat] format
+        coordinates: [e.latLng.lng(), e.latLng.lat()],
       },
     });
   };
 
-  // Handle input changes for alert title and message
+  // Handle input changes
   const handleChange = (e) => {
     setAlertDetails({ ...alertDetails, [e.target.name]: e.target.value });
   };
@@ -97,20 +96,24 @@ const Alerts = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="location" className="form-label">Alert Location</label>
-          <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+          <LoadScript
+            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+            onError={(error) => console.error('Google Maps API failed to load:', error)}
+            onLoad={() => console.log('Google Maps API loaded successfully')}
+          >
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={{
-                lat: alertDetails.location.coordinates[1], // latitude
-                lng: alertDetails.location.coordinates[0], // longitude
+                lat: alertDetails.location.coordinates[1],
+                lng: alertDetails.location.coordinates[0],
               }}
               zoom={13}
-              onClick={handleMapClick} // Update location on map click
+              onClick={handleMapClick}
             >
               <Marker
                 position={{
-                  lat: alertDetails.location.coordinates[1], // latitude
-                  lng: alertDetails.location.coordinates[0], // longitude
+                  lat: alertDetails.location.coordinates[1],
+                  lng: alertDetails.location.coordinates[0],
                 }}
               />
             </GoogleMap>

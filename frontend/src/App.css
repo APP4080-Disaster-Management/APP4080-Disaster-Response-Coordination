@@ -7,8 +7,7 @@ body {
 }
 
 nav {
-  background-color: rgb(41, 248, 41);
-  padding: 1rem 0; /* Padding on top and bottom */
+  /* background-color: rgb(41, 248, 41); */
   display: flex; /* Use flexbox for alignment */
   justify-content: flex-end; /* Align items to the right */
 }
@@ -23,7 +22,6 @@ nav ul li {
   display: inline;
   margin-right: 20px; /* Space between items */
 }
-
 
 nav ul li a {
   color: black;
@@ -95,6 +93,7 @@ ul li {
   border-radius: 5px;
   padding: 15px;
   margin-bottom: 10px;
+  background-color:rgb(11, 224, 65);
 }
 
 ul li h3 {
@@ -104,3 +103,24 @@ ul li h3 {
 ul li p {
   margin: 5px 0;
 }
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+}
+
+.notify-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.notify-btn:hover {
+  background-color: #0056b3;
+}
+

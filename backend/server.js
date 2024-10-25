@@ -7,6 +7,8 @@ const donationsRoutes = require('./routes/donationsRoutes');
 const volunteersRoutes = require('./routes/volunteersRoutes');
 const alertsRoutes = require('./routes/alertsRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const disasterRoutes = require('./routes/disasters');
+
 // const cors = require('cors');
 // require('dotenv').config();
 
@@ -23,6 +25,8 @@ app.use('/api/donations', donationsRoutes);
 app.use('/api/volunteers', volunteersRoutes);
 app.use('/api/alerts', alertsRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/disasters', disasterRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

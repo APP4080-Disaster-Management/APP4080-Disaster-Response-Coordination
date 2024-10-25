@@ -9,6 +9,8 @@ import Volunteers from './components/Volunteers';
 import Navigation from './components/Navigation';
 import NotFound from './pages/NotFound';
 import Alerts from './components/Alerts';
+import Disasters from './components/Disaster'; // Make sure this path is correct
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -36,6 +38,9 @@ function App() {
           <Route path="/donations" element={<Donations />} />
           <Route path="/volunteers" element={<Volunteers />} />
           <Route path="/alerts" element={<Alerts />} />
+          <Route path="/disasters" element={<Disasters />} /> {/* New route for Disasters */}
+
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

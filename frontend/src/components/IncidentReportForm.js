@@ -40,7 +40,10 @@ const IncidentReportForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/incidents/report', incidentDetails, {
+      const response = await axios.post('/api/incidents/report', incidentDetails,
+        
+        {
+        
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're using localStorage to store the token
         },

@@ -27,7 +27,8 @@ function Login() {
           window.location.href = '/';
       }
     } catch (err) {
-      setError('Invalid email or password');
+      console.error("Login error:", err.response ? err.response.data : err.message);
+      setError(err.response?.data?.message || 'Invalid email or password');
     }
   };
 

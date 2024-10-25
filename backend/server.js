@@ -7,10 +7,13 @@ const donationsRoutes = require('./routes/donationsRoutes');
 const volunteersRoutes = require('./routes/volunteersRoutes');
 const alertsRoutes = require('./routes/alertsRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+// const cors = require('cors');
+// require('dotenv').config();
 
 dotenv.config();
 connectDB();
 
+// app.use(cors());
 const app = express();
 app.use(express.json());
 

@@ -42,7 +42,7 @@ function SignUp() {
       console.log('Form submitted:', formData);
       // Submit form data to the backend
       setFormData({ username: '', email: '', password: '' }); // Reset form
-      setErrors({}); // Clear errors
+      setErrors({}); 
       toast.success('Signup Successful');
     }
   };

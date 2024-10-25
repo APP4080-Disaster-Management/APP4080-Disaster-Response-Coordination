@@ -8,7 +8,7 @@ const IncidentReportForm = () => {
     location: '',
   });
 
-  // List of locations in Nairobi
+ 
   const locations = [
     { value: '', label: 'Select a location' },
     { value: 'central_business_district', label: 'Central Business District' },

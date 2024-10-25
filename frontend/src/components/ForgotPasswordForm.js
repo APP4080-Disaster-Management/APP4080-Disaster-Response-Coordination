@@ -8,16 +8,16 @@ const ForgotPassword = () => {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault(); // Prevent the default form submission
-    setLoading(true); // Set loading state
+    setLoading(true); 
 
     try {
       await axios.post('/api/auth/forgot-password', { email });
       toast.success('Password reset email sent');
-      setEmail(''); // Clear the input field after successful submission
+      setEmail(''); 
     } catch (error) {
       toast.error('Error sending reset email');
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false); 
     }
   };
 

@@ -5,6 +5,7 @@ import IncidentReportForm from './components/IncidentReportForm';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Donations from './components/Donations';
+import AddDonation from './components/AddDonation';
 import Volunteers from './components/Volunteers';
 import Navigation from './components/Navigation';
 import NotFound from './pages/NotFound';
@@ -36,6 +37,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/incident-reporting" element={<IncidentReportForm />} />
           <Route path="/donations" element={<Donations />} />
+          <Route path="/Add_Donation" element={<AddDonation />} />
+
           <Route path="/volunteers" element={<Volunteers />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/disasters" element={<Disasters />} /> {/* New route for Disasters */}

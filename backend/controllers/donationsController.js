@@ -10,10 +10,10 @@ const getDonations = async (req, res) => {
 };
 
 const addDonation = async (req, res) => {
-  const { name, amount } = req.body;
+  const { name, amount, contact, location } = req.body;
 
   try {
-    const donation = new Donation({ name, amount });
+    const donation = new Donation({ name, amount, contact, location });
     await donation.save();
     res.status(201).json(donation);
   } catch (error) {

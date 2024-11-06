@@ -8,7 +8,7 @@ const Donations = () => {
   useEffect(() => {
     const fetchDonations = async () => {
       try {
-        const response = await axios.get('/api/donations');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/donations`);
         setDonations(response.data);
       } catch (error) {
         console.error('Error fetching donations', error);
@@ -25,6 +25,9 @@ const Donations = () => {
           <tr>
             <th>Donor Name</th>
             <th>Amount</th>
+            <th>Date</th>
+            <th>Contact</th>
+            <th>Location</th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +35,9 @@ const Donations = () => {
             <tr key={donation._id}>
               <td>{donation.name}</td>
               <td>${donation.amount}</td>
+              <td>{new Date(donation.date).toLocaleDateString()}</td> {/* Format date */}
+              <td>{donation.contact}</td> {/* Display contact */}
+              <td>{donation.location}</td> {/* Display location */}
             </tr>
           ))}
         </tbody>

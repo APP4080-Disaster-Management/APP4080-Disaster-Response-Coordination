@@ -1,8 +1,12 @@
+// routes/volunteers.js
 const express = require('express');
-const { getVolunteers, addVolunteer } = require('../controllers/volunteersController');
+const { registerVolunteer, getAllVolunteers } = require('../controllers/volunteersController');
 const router = express.Router();
 
-router.get('/', getVolunteers);
-router.post('/', addVolunteer);
+// Route to register a volunteer
+router.post('/', registerVolunteer);
+
+// Route to get all volunteers
+router.get('/', getAllVolunteers);
 
 module.exports = router;

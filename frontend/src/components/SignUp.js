@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Importing CSS for toast notifications
 
 function SignUp() {
-  const handleGoogleSuccess = (credentialResponse) => {
-    console.log(credentialResponse);
-    toast.success('Google Login Successful');
-  };
-
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
-
   const [errors, setErrors] = useState({});
+
+  const handleGoogleSuccess = (credentialResponse) => {
+    console.log(credentialResponse);
+    toast.success('Google Login Successful');
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,17 +33,23 @@ function SignUp() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      console.log('Form submitted:', formData);
-      // Submit form data to the backend
-      setFormData({ username: '', email: '', password: '' }); // Reset form
-      setErrors({}); // Clear errors
-      toast.success('Signup Successful');
+      try {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signup`, formData);
+        toast.success('Signup Successful');
+        // Clear form and errors
+        setFormData({ username: '', email: '', password: '' });
+        setErrors({});
+        console.log('Server response:', response.data); // Optional: log response
+      } catch (error) {
+        console.error('Signup error:', error.response ? error.response.data : error.message);
+        toast.error(error.response?.data?.message || 'Signup failed');
+      }
     }
   };
 
@@ -63,7 +69,7 @@ function SignUp() {
           />
           {errors.username && <span className="error">{errors.username}</span>}
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
@@ -76,7 +82,7 @@ function SignUp() {
           />
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input

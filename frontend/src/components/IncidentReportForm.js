@@ -7,6 +7,9 @@ const IncidentReportForm = () => {
     description: '',
     location: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   // List of locations in Nairobi
   const locations = [
@@ -36,52 +39,64 @@ const IncidentReportForm = () => {
       [e.target.name]: e.target.value,
     });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    setSuccessMessage(null);
+  
     try {
-      const response = await axios.post('/api/incidents/report', incidentDetails,
-        
+      // Send the incident data with the correct headers syntax
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/incidents/report`,
+        incidentDetails,
         {
-        
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're using localStorage to store the token
-        },
-      });
-      alert('Incident reported successfully!');
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+  
+      setSuccessMessage('Incident reported successfully!');
+      setIncidentDetails({ title: '', description: '', location: '' });
     } catch (error) {
-      console.error(error);
-      alert('Error reporting incident');
+      console.error('Error reporting incident:', error);
+      setError('Failed to report the incident. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label>Title</label>
-        <input 
-          type="text" 
-          name="title" 
-          value={incidentDetails.title} 
-          onChange={handleChange} 
-          required 
+        <input
+          type="text"
+          name="title"
+          value={incidentDetails.title}
+          onChange={handleChange}
+          required
+          minLength="3"
         />
       </div>
       <div>
         <label>Description</label>
-        <textarea 
-          name="description" 
-          value={incidentDetails.description} 
-          onChange={handleChange} 
-          required 
+        <textarea
+          name="description"
+          value={incidentDetails.description}
+          onChange={handleChange}
+          required
+          minLength="10"
         />
       </div>
       <div>
         <label>Location</label>
-        <select 
-          name="location" 
-          value={incidentDetails.location} 
-          onChange={handleChange} 
+        <select
+          name="location"
+          value={incidentDetails.location}
+          onChange={handleChange}
           required
         >
           {locations.map((loc) => (
@@ -91,7 +106,12 @@ const IncidentReportForm = () => {
           ))}
         </select>
       </div>
-      <button type="submit">Report Incident</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Reporting...' : 'Report Incident'}
+      </button>
+
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>
   );
 };

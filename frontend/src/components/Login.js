@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Login() {
+function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,8 +12,11 @@ function Login() {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, { email, password });
       localStorage.setItem('token', response.data.token);
       
+      // Set login state to true
+      setIsLoggedIn(true);
+
       // Role-based redirection
-      switch(response.data.role) {
+      switch (response.data.role) {
         case 'victim':
           window.location.href = '/victim-dashboard';
           break;

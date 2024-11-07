@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
@@ -10,12 +11,21 @@ import Volunteers from './components/Volunteers';
 import Navigation from './components/Navigation';
 import NotFound from './pages/NotFound';
 import Alerts from './components/Alerts';
-import Disasters from './components/Disaster'; // Make sure this path is correct
-
+import Disasters from './components/Disaster';
+import IncidentList from './components/IncidentList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if the token is in localStorage to set login state
+    if (localStorage.getItem('token')) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const notify = () => {
     toast('Welcome to the Disaster Response Coordination App!');
   };
@@ -25,25 +35,22 @@ function App() {
       <ToastContainer />
 
       <Router>
-        {/* Container to hold both Navigation and Notification Button */}
         <div className="nav-container">
-          <Navigation />
-          <button onClick={notify} className="notify-btn">Show Notification</button>
+          <Navigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          <button onClick={notify} className="notify-btn">Notification</button>
         </div>
 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/incident-reporting" element={<IncidentReportForm />} />
           <Route path="/donations" element={<Donations />} />
           <Route path="/Add_Donation" element={<AddDonation />} />
-
           <Route path="/volunteers" element={<Volunteers />} />
           <Route path="/alerts" element={<Alerts />} />
-          <Route path="/disasters" element={<Disasters />} /> {/* New route for Disasters */}
-
-
+          <Route path="/disasters" element={<Disasters />} />
+          <Route path="/incidentlists" element={<IncidentList />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

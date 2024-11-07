@@ -17,7 +17,19 @@ const Alerts = () => {
     alertTitle: '',
     alertMessage: '',
     location: { type: 'Point', coordinates: [defaultCenter.lng, defaultCenter.lat] },
+    address: '', // New field to store the address
   });
+
+  const [geocoder, setGeocoder] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+
+  // Initialize the geocoder
+  useEffect(() => {
+    if (window.google && window.google.maps) {
+      const geocoderInstance = new window.google.maps.Geocoder();
+      setGeocoder(geocoderInstance);
+    }
+  }, []);
 
   // Get the user's current location on component mount
   useEffect(() => {
@@ -39,15 +51,33 @@ const Alerts = () => {
     }
   }, []);
 
-  // Handle map click to update location
+  // Handle map click to update location and fetch address
   const handleMapClick = (e) => {
+    const { latLng } = e;
+    const lat = latLng.lat();
+    const lng = latLng.lng();
+
     setAlertDetails({
       ...alertDetails,
       location: {
         type: 'Point',
-        coordinates: [e.latLng.lng(), e.latLng.lat()],
+        coordinates: [lng, lat],
       },
     });
+
+    // Reverse geocode the clicked location to get the address
+    if (geocoder) {
+      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+        if (status === window.google.maps.GeocoderStatus.OK && results[0]) {
+          setAlertDetails((prevDetails) => ({
+            ...prevDetails,
+            address: results[0].formatted_address, // Set the address to the state
+          }));
+        } else {
+          console.error('Geocoder failed to retrieve the address');
+        }
+      });
+    }
   };
 
   // Handle input changes
@@ -59,7 +89,8 @@ const Alerts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/alerts', alertDetails);
+      const apiUrl = process.env.REACT_APP_API_URL;
+      await axios.post(`${apiUrl}/alerts`, alertDetails);
       alert('Alert sent successfully!');
     } catch (error) {
       console.error('Error sending alert:', error);
@@ -67,60 +98,95 @@ const Alerts = () => {
     }
   };
 
+  // Handle login/logout
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    // You can add additional login logic here
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    // You can add additional logout logic here (e.g., clearing user data)
+  };
+
   return (
     <div className="container">
       <h2>Send an Alert</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="alertTitle" className="form-label">Alert Title</label>
-          <input
-            type="text"
-            className="form-control"
-            id="alertTitle"
-            name="alertTitle"
-            value={alertDetails.alertTitle}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="alertMessage" className="form-label">Alert Message</label>
-          <textarea
-            className="form-control"
-            id="alertMessage"
-            name="alertMessage"
-            value={alertDetails.alertMessage}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="location" className="form-label">Alert Location</label>
-          <LoadScript
-            googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-            onError={(error) => console.error('Google Maps API failed to load:', error)}
-            onLoad={() => console.log('Google Maps API loaded successfully')}
-          >
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={{
-                lat: alertDetails.location.coordinates[1],
-                lng: alertDetails.location.coordinates[0],
-              }}
-              zoom={13}
-              onClick={handleMapClick}
+
+      {/* Show the Login/Logout button based on the isLoggedIn state */}
+      {!isLoggedIn ? (
+        <button onClick={handleLogin} className="btn btn-success">
+          Login
+        </button>
+      ) : (
+        <button onClick={handleLogout} className="btn btn-danger">
+          Logout
+        </button>
+      )}
+
+      {/* Show the alert form only if logged in */}
+      {isLoggedIn && (
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="alertTitle" className="form-label">Alert Title</label>
+            <input
+              type="text"
+              className="form-control"
+              id="alertTitle"
+              name="alertTitle"
+              value={alertDetails.alertTitle}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="alertMessage" className="form-label">Alert Message</label>
+            <textarea
+              className="form-control"
+              id="alertMessage"
+              name="alertMessage"
+              value={alertDetails.alertMessage}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="location" className="form-label">Alert Location</label>
+            <input
+              type="text"
+              className="form-control"
+              id="location"
+              name="address"
+              value={alertDetails.address} // Display the actual address here
+              onChange={handleChange}
+              readOnly // Make this field read-only to avoid manual editing
+            />
+            <LoadScript
+              googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+              onError={(error) => console.error('Google Maps API failed to load:', error)}
+              onLoad={() => console.log('Google Maps API loaded successfully')}
             >
-              <Marker
-                position={{
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={{
                   lat: alertDetails.location.coordinates[1],
                   lng: alertDetails.location.coordinates[0],
                 }}
-              />
-            </GoogleMap>
-          </LoadScript>
-        </div>
-        <button type="submit" className="btn btn-primary">Send Alert</button>
-      </form>
+                zoom={13}
+                onClick={handleMapClick}
+              >
+                <Marker
+                  position={{
+                    lat: alertDetails.location.coordinates[1],
+                    lng: alertDetails.location.coordinates[0],
+                  }}
+                />
+              </GoogleMap>
+            </LoadScript>
+          </div>
+          <button type="submit" className="btn btn-primary">Send Alert</button>
+        </form>
+      )}
     </div>
   );
 };

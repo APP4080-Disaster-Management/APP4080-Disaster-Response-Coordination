@@ -54,4 +54,21 @@ const verifyIncident = async (req, res) => {
   }
 };
 
-module.exports = { reportIncident, verifyIncident };
+// Get all incidents
+const getAllIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find(); // Fetch all incidents from the database
+
+    // Respond with the list of incidents
+    res.status(200).json({
+      message: 'Incidents fetched successfully',
+      incidents,
+    });
+  } catch (error) {
+    // Error handling
+    console.error('Error fetching incidents:', error);
+    res.status(500).json({ message: 'Error fetching incidents', error });
+  }
+};
+
+module.exports = { reportIncident, verifyIncident, getAllIncidents };
